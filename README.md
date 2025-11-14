@@ -1,16 +1,19 @@
-# rice_chat
+## 커밋 컨벤션
 
-A new Flutter project.
+| 컨벤션 | 설명(Description) |
+|------------|-------------------|
+| **feat**   | 새로운 기능을 추가할 때 |
+| **fix**    | 버그를 수정할 때 |
+| **docs**   | 문서 내용을 변경할 때 |
+| **style**  | 기능 변경 없이 코드 스타일·서식 변경할 때 |
+| **refactor** | 기능 변경 없이 코드 구조만 개선할 때 |
+| **test**   | 테스트 코드 관련 변경 |
+| **chore**  | 빌드 스크립트, 패키지 설정, 유지보수 작업 |
 
-## Getting Started
+### 커밋하실때 지켜주세요
 
-This project is a starting point for a Flutter application.
+```
+feat: 커밋 메시지 적을 내용
+```
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+띄어쓰기 간격도 위에처럼 맞춰주시면 감사합니다
