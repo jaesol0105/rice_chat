@@ -32,8 +32,8 @@ class BottomNavBar extends StatelessWidget {
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.person),
               activeIcon: Icon(CupertinoIcons.person_fill),
-              label: '나의 마켓',
-              tooltip: '나의 마켓',
+              label: '프로필',
+              tooltip: '프로필',
             ),
           ],
         );
