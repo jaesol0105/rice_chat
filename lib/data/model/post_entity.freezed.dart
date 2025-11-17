@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PostEntity {
 
- String get id; String get title; String get content; String get writer;@JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp) DateTime? get createdAt;
+ String get id; String get title; String get content; String get writer;@JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp) DateTime? get createdAt;//required List<String>? tags,
+ List<String>? get images;
 /// Create a copy of PostEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +29,16 @@ $PostEntityCopyWith<PostEntity> get copyWith => _$PostEntityCopyWithImpl<PostEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PostEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.writer, writer) || other.writer == writer)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PostEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.writer, writer) || other.writer == writer)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other.images, images));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,content,writer,createdAt);
+int get hashCode => Object.hash(runtimeType,id,title,content,writer,createdAt,const DeepCollectionEquality().hash(images));
 
 @override
 String toString() {
-  return 'PostEntity(id: $id, title: $title, content: $content, writer: $writer, createdAt: $createdAt)';
+  return 'PostEntity(id: $id, title: $title, content: $content, writer: $writer, createdAt: $createdAt, images: $images)';
 }
 
 
@@ -48,7 +49,7 @@ abstract mixin class $PostEntityCopyWith<$Res>  {
   factory $PostEntityCopyWith(PostEntity value, $Res Function(PostEntity) _then) = _$PostEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, String content, String writer,@JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp) DateTime? createdAt
+ String id, String title, String content, String writer,@JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp) DateTime? createdAt, List<String>? images
 });
 
 
@@ -65,14 +66,15 @@ class _$PostEntityCopyWithImpl<$Res>
 
 /// Create a copy of PostEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? content = null,Object? writer = null,Object? createdAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? content = null,Object? writer = null,Object? createdAt = freezed,Object? images = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String,writer: null == writer ? _self.writer : writer // ignore: cast_nullable_to_non_nullable
 as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,images: freezed == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
+as List<String>?,
   ));
 }
 
@@ -157,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String content,  String writer, @JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp)  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String content,  String writer, @JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp)  DateTime? createdAt,  List<String>? images)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PostEntity() when $default != null:
-return $default(_that.id,_that.title,_that.content,_that.writer,_that.createdAt);case _:
+return $default(_that.id,_that.title,_that.content,_that.writer,_that.createdAt,_that.images);case _:
   return orElse();
 
 }
@@ -178,10 +180,10 @@ return $default(_that.id,_that.title,_that.content,_that.writer,_that.createdAt)
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String content,  String writer, @JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp)  DateTime? createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String content,  String writer, @JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp)  DateTime? createdAt,  List<String>? images)  $default,) {final _that = this;
 switch (_that) {
 case _PostEntity():
-return $default(_that.id,_that.title,_that.content,_that.writer,_that.createdAt);case _:
+return $default(_that.id,_that.title,_that.content,_that.writer,_that.createdAt,_that.images);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +200,10 @@ return $default(_that.id,_that.title,_that.content,_that.writer,_that.createdAt)
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String content,  String writer, @JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp)  DateTime? createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String content,  String writer, @JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp)  DateTime? createdAt,  List<String>? images)?  $default,) {final _that = this;
 switch (_that) {
 case _PostEntity() when $default != null:
-return $default(_that.id,_that.title,_that.content,_that.writer,_that.createdAt);case _:
+return $default(_that.id,_that.title,_that.content,_that.writer,_that.createdAt,_that.images);case _:
   return null;
 
 }
@@ -213,7 +215,7 @@ return $default(_that.id,_that.title,_that.content,_that.writer,_that.createdAt)
 @JsonSerializable()
 
 class _PostEntity implements PostEntity {
-  const _PostEntity({required this.id, required this.title, required this.content, required this.writer, @JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp) required this.createdAt});
+  const _PostEntity({required this.id, required this.title, required this.content, required this.writer, @JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp) this.createdAt, final  List<String>? images}): _images = images;
   factory _PostEntity.fromJson(Map<String, dynamic> json) => _$PostEntityFromJson(json);
 
 @override final  String id;
@@ -221,6 +223,17 @@ class _PostEntity implements PostEntity {
 @override final  String content;
 @override final  String writer;
 @override@JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp) final  DateTime? createdAt;
+//required List<String>? tags,
+ final  List<String>? _images;
+//required List<String>? tags,
+@override List<String>? get images {
+  final value = _images;
+  if (value == null) return null;
+  if (_images is EqualUnmodifiableListView) return _images;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
 
 /// Create a copy of PostEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +248,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PostEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.writer, writer) || other.writer == writer)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PostEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.content, content) || other.content == content)&&(identical(other.writer, writer) || other.writer == writer)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other._images, _images));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,content,writer,createdAt);
+int get hashCode => Object.hash(runtimeType,id,title,content,writer,createdAt,const DeepCollectionEquality().hash(_images));
 
 @override
 String toString() {
-  return 'PostEntity(id: $id, title: $title, content: $content, writer: $writer, createdAt: $createdAt)';
+  return 'PostEntity(id: $id, title: $title, content: $content, writer: $writer, createdAt: $createdAt, images: $images)';
 }
 
 
@@ -255,7 +268,7 @@ abstract mixin class _$PostEntityCopyWith<$Res> implements $PostEntityCopyWith<$
   factory _$PostEntityCopyWith(_PostEntity value, $Res Function(_PostEntity) _then) = __$PostEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, String content, String writer,@JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp) DateTime? createdAt
+ String id, String title, String content, String writer,@JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp) DateTime? createdAt, List<String>? images
 });
 
 
@@ -272,14 +285,15 @@ class __$PostEntityCopyWithImpl<$Res>
 
 /// Create a copy of PostEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? content = null,Object? writer = null,Object? createdAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? content = null,Object? writer = null,Object? createdAt = freezed,Object? images = freezed,}) {
   return _then(_PostEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String,writer: null == writer ? _self.writer : writer // ignore: cast_nullable_to_non_nullable
 as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,images: freezed == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
+as List<String>?,
   ));
 }
 
