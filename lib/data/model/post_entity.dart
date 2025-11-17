@@ -12,9 +12,9 @@ abstract class PostEntity with _$PostEntity {
     required String content,
     required String writer,
     @JsonKey(name: 'created_at', fromJson: _convertToDateTime, toJson: _convertToTimestamp)
-    required DateTime? createdAt,
-    //required String profileImgUrl,
-    //required String address,
+    DateTime? createdAt,
+    //required List<String>? tags,
+    List<String>? images,
   }) = _PostEntity;
 
   factory PostEntity.fromJson(Map<String, dynamic> json) => _$PostEntityFromJson(json);

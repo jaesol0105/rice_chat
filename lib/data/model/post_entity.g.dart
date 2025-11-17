@@ -12,6 +12,7 @@ _PostEntity _$PostEntityFromJson(Map<String, dynamic> json) => _PostEntity(
   content: json['content'] as String,
   writer: json['writer'] as String,
   createdAt: _convertToDateTime(json['created_at']),
+  images: (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
 );
 
 Map<String, dynamic> _$PostEntityToJson(_PostEntity instance) =>
@@ -21,4 +22,5 @@ Map<String, dynamic> _$PostEntityToJson(_PostEntity instance) =>
       'content': instance.content,
       'writer': instance.writer,
       'created_at': _convertToTimestamp(instance.createdAt),
+      'images': instance.images,
     };
