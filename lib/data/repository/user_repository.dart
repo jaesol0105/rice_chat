@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rice_chat/data/model/user_entity.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'user_repository.g.dart';
+
 class UserRepository {
   UserRepository({required this.db});
 
