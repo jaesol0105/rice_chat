@@ -110,6 +110,9 @@ class SignUpPage extends HookConsumerWidget {
       controller: controller,
       maxLines: maxLines,
       decoration: InputDecoration(hintText: hint),
+      style: TextStyle(
+        fontSize: 12,
+      ),
     );
   }
 
