@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rice_chat/data/model/post_entity.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'post_repository.g.dart';
+
 class PostRepository {
   PostRepository({required this.db});
 

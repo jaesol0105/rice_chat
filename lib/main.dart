@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_chat/core/theme/theme.dart';
 import 'package:rice_chat/firebase_options.dart';
+import 'package:rice_chat/ui/address_search_page/address_search_page.dart';
 import 'package:rice_chat/ui/home_page/home_page.dart';
 
 void main() async {
@@ -19,8 +20,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: theme,
-      home: HomePage(),
+      home: AddressSearchPage(),
     );
   }
 }

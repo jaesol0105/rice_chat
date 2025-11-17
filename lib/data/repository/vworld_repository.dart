@@ -1,9 +1,40 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'vworld_repository.g.dart';
+
 class VworldRepository {
   VworldRepository({required this.client});
   final Dio client;
+
+  /// 텍스트로 읍면동 검색
+  Future<List<String>> findByName(String query) async {
+    try {
+      final response = await client.get(
+        'https://api.vworld.kr/req/search',
+        queryParameters: {
+          'request': 'search',
+          'key': '6B8D2367-BC2E-352D-AA02-963D026463A3',
+          'query': query,
+          'type': 'DISTRICT',
+          'category': 'L4',
+        },
+      );
+
+      // Response > result > items >> title
+      if (response.statusCode == 200 && response.data['response']['status'] == 'OK') {
+        final items = response.data['response']['result']['items'];
+        final itemList = List.from(items);
+        final iterable = itemList.map((item) {
+          return '${item['title']}';
+        });
+        return iterable.toList();
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
 
   /// 위도경도로 읍면동 검색
   Future<List<String>> findByLatLng(double lat, double lng) async {
