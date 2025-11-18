@@ -77,8 +77,8 @@ class SplashPage extends HookConsumerWidget {
                     SizedBox(height: 16),
                     button(
                       context,
-                      icon: Icons.sms,
-                      text: '카카오톡으로 로그인하기',
+                      icon: Icons.check_box_outline_blank,
+                      text: '네이버로 로그인하기',
                       onTap: () {},
                     ),
                   ],
