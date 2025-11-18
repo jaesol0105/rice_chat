@@ -11,13 +11,30 @@ class UserRepository {
 
   /// 유저 정보 추가 및 업데이트
   Future<void> updateUser(UserEntity user) async {
-    await db
-        .collection('users')
-        .doc(user.id)
-        .set(
-          user.toJson(),
-          SetOptions(merge: true), // 기존 데이터 유지
-        );
+    try {
+      await db
+          .collection('users')
+          .doc(user.id)
+          .set(
+            user.toJson(),
+            SetOptions(merge: true), // 기존 데이터 유지
+          );
+    } catch (e) {
+      print("ERROR_updateUser: $e");
+    }
+  }
+
+  Future<UserEntity> getUser(String userId) async {
+    try {
+      final doc = await db.collection('users').doc(userId).get();
+      if (!doc.exists) {
+        throw Exception('User not found (id: $userId)');
+      }
+
+      return UserEntity.fromJson({...doc.data()!, 'id': doc.id});
+    } catch (e) {
+      print("ERROR_getUser: $e");
+    }
   }
 }
 

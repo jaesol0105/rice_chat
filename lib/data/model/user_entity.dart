@@ -12,7 +12,7 @@ abstract class UserEntity with _$UserEntity {
     required bool sex,
     required String? address,
     @JsonKey(name: 'about_me') String? aboutMe,
-    //required String profileImgUrl,
+    required String? profileImgUrl,
     //required String address,
   }) = _UserEntity;
 

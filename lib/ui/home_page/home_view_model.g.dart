@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'bottom_nav_bar_view_model.dart';
+part of 'home_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,28 +9,28 @@ part of 'bottom_nav_bar_view_model.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(BottomNavBarViewModel)
-const bottomNavBarViewModelProvider = BottomNavBarViewModelProvider._();
+@ProviderFor(HomeViewModel)
+const homeViewModelProvider = HomeViewModelProvider._();
 
-final class BottomNavBarViewModelProvider
-    extends $NotifierProvider<BottomNavBarViewModel, int> {
-  const BottomNavBarViewModelProvider._()
+final class HomeViewModelProvider
+    extends $NotifierProvider<HomeViewModel, int> {
+  const HomeViewModelProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'bottomNavBarViewModelProvider',
+        name: r'homeViewModelProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$bottomNavBarViewModelHash();
+  String debugGetCreateSourceHash() => _$homeViewModelHash();
 
   @$internal
   @override
-  BottomNavBarViewModel create() => BottomNavBarViewModel();
+  HomeViewModel create() => HomeViewModel();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(int value) {
@@ -41,10 +41,9 @@ final class BottomNavBarViewModelProvider
   }
 }
 
-String _$bottomNavBarViewModelHash() =>
-    r'93c02da1feea620aa4c549c4524d17c49c75671e';
+String _$homeViewModelHash() => r'8cdde13ef559b4bc86dc1ee64d9f1d72fa4fdc4a';
 
-abstract class _$BottomNavBarViewModel extends $Notifier<int> {
+abstract class _$HomeViewModel extends $Notifier<int> {
   int build();
   @$mustCallSuper
   @override

@@ -61,6 +61,9 @@ class PostWriteViewModel extends _$PostWriteViewModel {
     final error = validate();
     if (error != null) return (false, error, null);
 
+    // 이미 로딩 중일 땐 또 호출하지 않기
+    if (state.loading) return (false, null, null);
+
     // loading 상태
     state = state.copyWith(loading: true);
 

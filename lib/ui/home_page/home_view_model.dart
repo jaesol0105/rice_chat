@@ -1,13 +1,12 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'bottom_nav_bar_view_model.g.dart';
+part 'home_view_model.g.dart';
 
 @riverpod
-class BottomNavBarViewModel extends _$BottomNavBarViewModel {
+class HomeViewModel extends _$HomeViewModel {
   @override
   int build() {
-    // 초기 인덱스
-    return 0;
+    return 0; // 초기 화면 인덱스
   }
 
   void onIndexChanged(int newIndex) {

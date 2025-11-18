@@ -42,7 +42,7 @@ final class PostWriteViewModelProvider
 }
 
 String _$postWriteViewModelHash() =>
-    r'd1d417caabfb7248c481d75aea2cc5937b26dfce';
+    r'f34a080d2821be74796ffb571e97a3aee37b218a';
 
 abstract class _$PostWriteViewModel extends $Notifier<PostWriteState> {
   PostWriteState build();
