@@ -12,7 +12,6 @@ class StorageRepository {
   final FirebaseStorage storage;
 
   /// 게시물 이미지 다중 업로드
-  @override
   Future<List<String>> uploadImages(List<XFile> files) async {
     final List<String> urls = [];
 

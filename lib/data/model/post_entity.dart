@@ -15,7 +15,6 @@ abstract class PostEntity with _$PostEntity {
     DateTime? createdAt,
     //required List<String>? tags,
     List<String>? images,
-    String? provider,
   }) = _PostEntity;
 
   factory PostEntity.fromJson(Map<String, dynamic> json) => _$PostEntityFromJson(json);

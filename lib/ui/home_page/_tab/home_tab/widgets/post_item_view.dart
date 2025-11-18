@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_chat/core/date_time_utils.dart';
 import 'package:rice_chat/data/model/post_entity.dart';
-import 'package:rice_chat/ui/user_global_view_model.dart';
+import 'package:rice_chat/ui/home_page/_tab/home_tab/user_by_id_provider.dart';
 
 class PostItemView extends ConsumerWidget {
   PostItemView({super.key, required this.posts});
@@ -11,7 +11,7 @@ class PostItemView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userGlobalViewModelProvider(posts.writer));
+    final user = ref.watch(userByIdProvider(posts.writer));
 
     return GestureDetector(
       onTap: () {

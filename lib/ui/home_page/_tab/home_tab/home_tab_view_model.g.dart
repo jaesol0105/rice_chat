@@ -33,7 +33,7 @@ final class HomeTabViewModelProvider
   HomeTabViewModel create() => HomeTabViewModel();
 }
 
-String _$homeTabViewModelHash() => r'c4a73f64e38b27a99f5c75b3d70cb4baf4ad55bf';
+String _$homeTabViewModelHash() => r'db3efca4fd75e0ff08bb98ca60280f192c5afaba';
 
 abstract class _$HomeTabViewModel extends $AsyncNotifier<HomeTabState> {
   FutureOr<HomeTabState> build();
