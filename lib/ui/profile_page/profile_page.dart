@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:rice_chat/ui/shared/bottom_nav_bar.dart';
+import 'package:rice_chat/ui/home_page/widgets/home_bottom_navigation_bar.dart';
 
 class ProfilePage extends HookConsumerWidget {
   const ProfilePage({super.key});
@@ -58,11 +58,7 @@ class ProfilePage extends HookConsumerWidget {
                       ? FileImage(profileImage.value!)
                       : null,
                   child: profileImage.value == null
-                      ? const Icon(
-                          Icons.camera_alt,
-                          size: 38,
-                          color: Colors.black54,
-                        )
+                      ? const Icon(Icons.camera_alt, size: 38, color: Colors.black54)
                       : null,
                 ),
               ),
@@ -70,19 +66,11 @@ class ProfilePage extends HookConsumerWidget {
               const SizedBox(height: 40),
 
               // 이름
-              _buildInputField(
-                context: context,
-                controller: nameController,
-                hint: "이름",
-              ),
+              _buildInputField(context: context, controller: nameController, hint: "이름"),
 
               const SizedBox(height: 20),
 
-              _buildInputField(
-                context: context,
-                controller: ageController,
-                hint: "나이/성별",
-              ),
+              _buildInputField(context: context, controller: ageController, hint: "나이/성별"),
 
               const SizedBox(height: 20),
 
@@ -96,7 +84,7 @@ class ProfilePage extends HookConsumerWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: HomeBottomNavigationBar(),
     );
   }
 

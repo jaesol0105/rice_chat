@@ -1,18 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rice_chat/ui/shared/bottom_nav_bar_view_model.dart';
+import 'package:rice_chat/ui/home_page/home_view_model.dart';
 
-class BottomNavBar extends StatelessWidget {
+class HomeBottomNavigationBar extends StatelessWidget {
+  const HomeBottomNavigationBar({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, child) {
-        final currentIndex = ref.watch(bottomNavBarViewModelProvider);
-        final viewModel = ref.read(bottomNavBarViewModelProvider.notifier);
+        final currentIndex = ref.watch(homeViewModelProvider);
+        final vm = ref.read(homeViewModelProvider.notifier);
         return BottomNavigationBar(
           currentIndex: currentIndex,
-          onTap: viewModel.onIndexChanged,
+          onTap: vm.onIndexChanged,
           iconSize: 28,
           selectedLabelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
           unselectedLabelStyle: TextStyle(fontSize: 12),

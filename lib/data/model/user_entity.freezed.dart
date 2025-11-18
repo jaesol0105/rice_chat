@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserEntity {
 
- String get id; String get name; int get age; bool get sex; String? get address;@JsonKey(name: 'about_me') String? get aboutMe;
+ String get id; String get name; int get age; bool get sex; String? get address;@JsonKey(name: 'about_me') String? get aboutMe; String? get profileImgUrl;
 /// Create a copy of UserEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $UserEntityCopyWith<UserEntity> get copyWith => _$UserEntityCopyWithImpl<UserEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.age, age) || other.age == age)&&(identical(other.sex, sex) || other.sex == sex)&&(identical(other.address, address) || other.address == address)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.age, age) || other.age == age)&&(identical(other.sex, sex) || other.sex == sex)&&(identical(other.address, address) || other.address == address)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe)&&(identical(other.profileImgUrl, profileImgUrl) || other.profileImgUrl == profileImgUrl));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,age,sex,address,aboutMe);
+int get hashCode => Object.hash(runtimeType,id,name,age,sex,address,aboutMe,profileImgUrl);
 
 @override
 String toString() {
-  return 'UserEntity(id: $id, name: $name, age: $age, sex: $sex, address: $address, aboutMe: $aboutMe)';
+  return 'UserEntity(id: $id, name: $name, age: $age, sex: $sex, address: $address, aboutMe: $aboutMe, profileImgUrl: $profileImgUrl)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $UserEntityCopyWith<$Res>  {
   factory $UserEntityCopyWith(UserEntity value, $Res Function(UserEntity) _then) = _$UserEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, int age, bool sex, String? address,@JsonKey(name: 'about_me') String? aboutMe
+ String id, String name, int age, bool sex, String? address,@JsonKey(name: 'about_me') String? aboutMe, String? profileImgUrl
 });
 
 
@@ -65,7 +65,7 @@ class _$UserEntityCopyWithImpl<$Res>
 
 /// Create a copy of UserEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? age = null,Object? sex = null,Object? address = freezed,Object? aboutMe = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? age = null,Object? sex = null,Object? address = freezed,Object? aboutMe = freezed,Object? profileImgUrl = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -73,6 +73,7 @@ as String,age: null == age ? _self.age : age // ignore: cast_nullable_to_non_nul
 as int,sex: null == sex ? _self.sex : sex // ignore: cast_nullable_to_non_nullable
 as bool,address: freezed == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as String?,aboutMe: freezed == aboutMe ? _self.aboutMe : aboutMe // ignore: cast_nullable_to_non_nullable
+as String?,profileImgUrl: freezed == profileImgUrl ? _self.profileImgUrl : profileImgUrl // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -158,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  int age,  bool sex,  String? address, @JsonKey(name: 'about_me')  String? aboutMe)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  int age,  bool sex,  String? address, @JsonKey(name: 'about_me')  String? aboutMe,  String? profileImgUrl)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserEntity() when $default != null:
-return $default(_that.id,_that.name,_that.age,_that.sex,_that.address,_that.aboutMe);case _:
+return $default(_that.id,_that.name,_that.age,_that.sex,_that.address,_that.aboutMe,_that.profileImgUrl);case _:
   return orElse();
 
 }
@@ -179,10 +180,10 @@ return $default(_that.id,_that.name,_that.age,_that.sex,_that.address,_that.abou
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  int age,  bool sex,  String? address, @JsonKey(name: 'about_me')  String? aboutMe)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  int age,  bool sex,  String? address, @JsonKey(name: 'about_me')  String? aboutMe,  String? profileImgUrl)  $default,) {final _that = this;
 switch (_that) {
 case _UserEntity():
-return $default(_that.id,_that.name,_that.age,_that.sex,_that.address,_that.aboutMe);case _:
+return $default(_that.id,_that.name,_that.age,_that.sex,_that.address,_that.aboutMe,_that.profileImgUrl);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +200,10 @@ return $default(_that.id,_that.name,_that.age,_that.sex,_that.address,_that.abou
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  int age,  bool sex,  String? address, @JsonKey(name: 'about_me')  String? aboutMe)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  int age,  bool sex,  String? address, @JsonKey(name: 'about_me')  String? aboutMe,  String? profileImgUrl)?  $default,) {final _that = this;
 switch (_that) {
 case _UserEntity() when $default != null:
-return $default(_that.id,_that.name,_that.age,_that.sex,_that.address,_that.aboutMe);case _:
+return $default(_that.id,_that.name,_that.age,_that.sex,_that.address,_that.aboutMe,_that.profileImgUrl);case _:
   return null;
 
 }
@@ -214,7 +215,7 @@ return $default(_that.id,_that.name,_that.age,_that.sex,_that.address,_that.abou
 @JsonSerializable()
 
 class _UserEntity implements UserEntity {
-  const _UserEntity({required this.id, required this.name, required this.age, required this.sex, required this.address, @JsonKey(name: 'about_me') this.aboutMe});
+  const _UserEntity({required this.id, required this.name, required this.age, required this.sex, required this.address, @JsonKey(name: 'about_me') this.aboutMe, required this.profileImgUrl});
   factory _UserEntity.fromJson(Map<String, dynamic> json) => _$UserEntityFromJson(json);
 
 @override final  String id;
@@ -223,6 +224,7 @@ class _UserEntity implements UserEntity {
 @override final  bool sex;
 @override final  String? address;
 @override@JsonKey(name: 'about_me') final  String? aboutMe;
+@override final  String? profileImgUrl;
 
 /// Create a copy of UserEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -237,16 +239,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.age, age) || other.age == age)&&(identical(other.sex, sex) || other.sex == sex)&&(identical(other.address, address) || other.address == address)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.age, age) || other.age == age)&&(identical(other.sex, sex) || other.sex == sex)&&(identical(other.address, address) || other.address == address)&&(identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe)&&(identical(other.profileImgUrl, profileImgUrl) || other.profileImgUrl == profileImgUrl));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,age,sex,address,aboutMe);
+int get hashCode => Object.hash(runtimeType,id,name,age,sex,address,aboutMe,profileImgUrl);
 
 @override
 String toString() {
-  return 'UserEntity(id: $id, name: $name, age: $age, sex: $sex, address: $address, aboutMe: $aboutMe)';
+  return 'UserEntity(id: $id, name: $name, age: $age, sex: $sex, address: $address, aboutMe: $aboutMe, profileImgUrl: $profileImgUrl)';
 }
 
 
@@ -257,7 +259,7 @@ abstract mixin class _$UserEntityCopyWith<$Res> implements $UserEntityCopyWith<$
   factory _$UserEntityCopyWith(_UserEntity value, $Res Function(_UserEntity) _then) = __$UserEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, int age, bool sex, String? address,@JsonKey(name: 'about_me') String? aboutMe
+ String id, String name, int age, bool sex, String? address,@JsonKey(name: 'about_me') String? aboutMe, String? profileImgUrl
 });
 
 
@@ -274,7 +276,7 @@ class __$UserEntityCopyWithImpl<$Res>
 
 /// Create a copy of UserEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? age = null,Object? sex = null,Object? address = freezed,Object? aboutMe = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? age = null,Object? sex = null,Object? address = freezed,Object? aboutMe = freezed,Object? profileImgUrl = freezed,}) {
   return _then(_UserEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -282,6 +284,7 @@ as String,age: null == age ? _self.age : age // ignore: cast_nullable_to_non_nul
 as int,sex: null == sex ? _self.sex : sex // ignore: cast_nullable_to_non_nullable
 as bool,address: freezed == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as String?,aboutMe: freezed == aboutMe ? _self.aboutMe : aboutMe // ignore: cast_nullable_to_non_nullable
+as String?,profileImgUrl: freezed == profileImgUrl ? _self.profileImgUrl : profileImgUrl // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

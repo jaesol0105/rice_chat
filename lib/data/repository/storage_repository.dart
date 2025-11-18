@@ -15,16 +15,21 @@ class StorageRepository {
   Future<List<String>> uploadImages(List<XFile> files) async {
     final List<String> urls = [];
 
-    for (final f in files) {
-      final ext = p.extension(f.path);
-      final name = "post_${DateTime.now().millisecondsSinceEpoch}_${urls.length}$ext";
+    try {
+      for (final f in files) {
+        final ext = p.extension(f.path);
+        final name = "post_${DateTime.now().millisecondsSinceEpoch}_${urls.length}$ext";
 
-      final ref = storage.ref().child("post_images/$name");
+        final ref = storage.ref().child("post_images/$name");
 
-      await ref.putFile(File(f.path));
-      final url = await ref.getDownloadURL();
+        await ref.putFile(File(f.path));
+        final url = await ref.getDownloadURL();
 
-      urls.add(url);
+        urls.add(url);
+      }
+    } catch (e) {
+      print("ERROR_uploadImages: $e");
+      rethrow;
     }
 
     return urls;

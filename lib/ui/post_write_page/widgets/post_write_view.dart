@@ -18,13 +18,13 @@ class PostWriteView extends HookConsumerWidget {
     return Column(
       children: [
         // 사진 등록
-        titleLabel("사진 등록(${state.images.length}/10)"),
+        _titleLabel("사진 등록(${state.images.length}/10)"),
         SizedBox(height: 5),
         PhotoPickerRowView(),
         SizedBox(height: 30),
 
         // 게시글 제목
-        titleLabel("제목"),
+        _titleLabel("제목"),
         SizedBox(height: 5),
         TextField(
           controller: titleController,
@@ -36,7 +36,7 @@ class PostWriteView extends HookConsumerWidget {
         SizedBox(height: 30),
 
         // 내용
-        titleLabel("내용"),
+        _titleLabel("내용"),
         SizedBox(height: 5),
         TextField(
           controller: contentController,
@@ -51,7 +51,7 @@ class PostWriteView extends HookConsumerWidget {
   }
 
   // TextField 스타일 정의
-  InputDecoration styleInputDecoration() {
+  InputDecoration _styleInputDecoration() {
     return InputDecoration(
       counterText: '',
       // 포커스가 없을 때 (기본) 테두리 색상
@@ -71,7 +71,7 @@ class PostWriteView extends HookConsumerWidget {
   }
 
   // 인풋창 라벨 스타일 정의
-  Widget titleLabel(String title) {
+  Widget _titleLabel(String title) {
     return Align(alignment: Alignment.centerLeft, child: Text(title));
   }
 }
