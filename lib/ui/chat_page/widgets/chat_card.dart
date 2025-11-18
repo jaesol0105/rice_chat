@@ -6,7 +6,7 @@ class ChatCard extends StatelessWidget {
   final String senderId;
   final String senderName;
   final String message;
-  final DateTime? time; // ✅ 문자열 대신 DateTime?
+  final DateTime? time;
   final String? imageUrl;
   final bool isMine;
   final bool showProfile;
@@ -27,6 +27,7 @@ class ChatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final dateTime = time;
 
+    /// 말풍선 시간 표시 (우측)
     Widget timeRight() {
       if (dateTime == null) return const SizedBox();
       return Column(
@@ -45,6 +46,7 @@ class ChatCard extends StatelessWidget {
       );
     }
 
+    /// 말풍선 시간 표시 (좌측)
     Widget timeLeft() {
       if (dateTime == null) return const SizedBox();
       return Column(
@@ -63,6 +65,7 @@ class ChatCard extends StatelessWidget {
       );
     }
 
+    // 내가 보낸 채팅일 경우
     if (isMine) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -74,7 +77,7 @@ class ChatCard extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             constraints: const BoxConstraints(maxWidth: 250),
             decoration: BoxDecoration(
-              color: const Color(0xff4CAF50),
+              color: const Color(0xFF983E24),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Text(
@@ -87,7 +90,9 @@ class ChatCard extends StatelessWidget {
           ),
         ],
       );
-    } else {
+    }
+    // 상대가 보낸 채팅일 경우
+    else {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

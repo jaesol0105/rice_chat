@@ -41,10 +41,6 @@ class ChatViewModel extends _$ChatViewModel {
     return result;
   }
 
-  Future<bool> deleteMessage(String messageId) async {
-    return repo.deleteMessage(roomId: roomId, messageId: messageId);
-  }
-
   void _listenStream() {
     _sub?.cancel(); // 혹시 이전 구독이 있으면 정리
 

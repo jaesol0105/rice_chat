@@ -1,7 +1,9 @@
+import 'package:rice_chat/core/auth/current_user_id_provider.dart';
 import 'package:rice_chat/data/model/post_entity.dart';
 import 'package:rice_chat/data/repository/post_repository.dart';
 import 'package:rice_chat/data/repository/storage_repository.dart';
 import 'package:rice_chat/ui/post_write_page/post_write_state.dart';
+import 'package:rice_chat/ui/user_global_view_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
@@ -70,19 +72,30 @@ class PostWriteViewModel extends _$PostWriteViewModel {
     try {
       // Storage 업로드
       final repo = ref.read(storageRepositoryProvider);
+      final id = ref.read(currentUserIdProvider);
+      if (id == null) {
+        throw Exception('로그인 오류');
+      }
       final urls = await repo.uploadImages(state.images);
+
+      // 유저 정보 가져오기
+      final userAsync = ref.read(userGlobalViewModelProvider);
+      final user = userAsync.value;
+      if (user == null) {
+        throw Exception('유저 정보 없음');
+      }
 
       // BookEntity 생성
       final data = PostEntity(
         id: const Uuid().v4(),
         title: state.title,
         content: state.content,
-        writer: 'test',
+        writer: id,
         images: urls,
       );
 
       // Firestore 저장
-      ref.read(postRepositoryProvider).createPost(post: data, address: '경기도 군포시 산본동');
+      ref.read(postRepositoryProvider).createPost(post: data, address: user.address!);
 
       return (true, null, data);
     } catch (e) {
