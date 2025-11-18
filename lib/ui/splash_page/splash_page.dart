@@ -25,7 +25,10 @@ class SplashPage extends HookConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Spacer(),
-              Image.asset("assets/images/logo.png"),
+              Image.asset("assets/images/logo.webp",
+              width: 320,
+              height: 320,
+              ),
               Spacer(),
               AnimatedOpacity(
                 opacity: showLoginButton.value ? 1 : 0,
