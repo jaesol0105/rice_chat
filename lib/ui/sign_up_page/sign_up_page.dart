@@ -1,10 +1,8 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:rice_chat/core/theme/color_scheme_ext.dart';
-import 'package:rice_chat/ui/home_page/home_page.dart';
+import 'package:rice_chat/ui/address_search_page/address_search_page.dart';
 import 'package:rice_chat/ui/sign_up_page/sign_up_view_model.dart';
 
 class SignUpPage extends HookConsumerWidget {
@@ -12,21 +10,14 @@ class SignUpPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final signUpState = ref.watch(signUpViewModelProvider);
+    final vm = ref.read(signUpViewModelProvider.notifier);
+
     TextEditingController nameController = useTextEditingController();
     TextEditingController ageController = useTextEditingController();
     TextEditingController descriptionController = useTextEditingController();
 
     final gender = useState<String>("남성");
-
-    final profileImage = useState<File?>(null);
-
-    Future<void> pickImage() async {
-      final picker = ImagePicker();
-      final XFile? picked = await picker.pickImage(source: ImageSource.gallery);
-      if (picked != null) {
-        profileImage.value = File(picked.path);
-      }
-    }
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -40,14 +31,14 @@ class SignUpPage extends HookConsumerWidget {
               children: [
                 InkWell(
                   borderRadius: BorderRadius.circular(60),
-                  onTap: () => pickImage(),
+                  onTap: () => vm.pickAndUploadProfileImage(),
                   child: CircleAvatar(
                     radius: 60,
                     backgroundColor: Colors.grey[300],
-                    backgroundImage: profileImage.value != null
-                        ? FileImage(profileImage.value!)
+                    backgroundImage: signUpState.profileImgUrl != null
+                        ? NetworkImage(signUpState.profileImgUrl!)
                         : null,
-                    child: profileImage.value == null
+                    child: signUpState.profileImgUrl == null
                         ? Icon(Icons.camera_alt, size: 38, color: Colors.black54)
                         : null,
                   ),
@@ -57,12 +48,7 @@ class SignUpPage extends HookConsumerWidget {
                 SizedBox(height: 20),
                 inputField(context, controller: ageController, hint: "나이"),
                 SizedBox(height: 20),
-                inputField(
-                  context,
-                  controller: descriptionController,
-                  hint: "소개 멘트",
-                  maxLines: 7,
-                ),
+                inputField(context, controller: descriptionController, hint: "소개 멘트", maxLines: 7),
                 SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -92,32 +78,28 @@ class SignUpPage extends HookConsumerWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () async {
-                          final viewModel = 
-                          ref.read(signUpViewModelProvider.notifier);
-
+                          final viewModel = ref.read(signUpViewModelProvider.notifier);
                           final error = viewModel.validate(
-                            name: nameController.text.trim(), 
-                            ageText: ageController.text.trim(), 
-                            about: descriptionController.text.trim(), 
+                            name: nameController.text.trim(),
+                            ageText: ageController.text.trim(),
+                            about: descriptionController.text.trim(),
                           );
-                          if(error != null){
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(error))
-                            );
+                          if (error != null) {
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(SnackBar(content: Text(error)));
                             return;
                           }
-
                           await viewModel.saveProfile(
-                            name: nameController.text, 
-                            age: int.tryParse(ageController.text) ?? 0, 
-                            sex: gender.value == "남성", 
-                            address: null, 
-                            aboutMe: descriptionController.text
+                            name: nameController.text,
+                            age: int.tryParse(ageController.text) ?? 0,
+                            sex: gender.value == "남성",
+                            address: null,
+                            aboutMe: descriptionController.text,
                           );
-                          Navigator.push(
-                            context, 
-                            MaterialPageRoute(
-                              builder: (context) => HomePage())
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => AddressSearchPage()),
                           );
                         },
                         child: Text("프로필 등록"),

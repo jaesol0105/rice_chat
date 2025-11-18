@@ -4,6 +4,8 @@ import 'package:rice_chat/ui/post_write_page/post_write_view_model.dart';
 import 'package:rice_chat/ui/post_write_page/widgets/post_write_view.dart';
 
 class PostWritePage extends HookConsumerWidget {
+  const PostWritePage({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(postWriteViewModelProvider);

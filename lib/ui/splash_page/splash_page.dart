@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_chat/core/theme/color_scheme_ext.dart';
+import 'package:rice_chat/data/model/user_check_status.dart';
+import 'package:rice_chat/ui/address_search_page/address_search_page.dart';
+import 'package:rice_chat/ui/home_page/home_page.dart';
 import 'package:rice_chat/ui/sign_up_page/sign_up_page.dart';
+import 'package:rice_chat/ui/splash_page/auth_state.dart';
 import 'package:rice_chat/ui/splash_page/auth_view_model.dart';
 
 class SplashPage extends HookConsumerWidget {
@@ -13,12 +17,35 @@ class SplashPage extends HookConsumerWidget {
     final showLoginButton = useState(false);
     final authState = ref.watch(authViewModelProvider);
 
+    // 로그인 버튼 딜레이
     useEffect(() {
       Future.delayed(Duration(seconds: 2), () {
         showLoginButton.value = true;
       });
       return null;
     }, []);
+
+    // 페이지 라우팅
+    ref.listen<AuthState>(authViewModelProvider, (prev, next) {
+      if (next.isLoading) return;
+      if (next.user == null || next.exist == null) return;
+
+      switch (next.exist!) {
+        case UserCheckStatus.noDocument:
+        case UserCheckStatus.missingName:
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const SignUpPage()));
+          break;
+        case UserCheckStatus.missingAddress:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const AddressSearchPage()),
+          );
+          break;
+        case UserCheckStatus.completed:
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomePage()));
+          break;
+      }
+    });
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -31,8 +58,10 @@ class SplashPage extends HookConsumerWidget {
               Spacer(),
               Image.asset("assets/images/logo.webp", width: 320, height: 320),
               Spacer(),
+              // 로딩
               if (authState.isLoading)
                 Padding(padding: EdgeInsets.only(bottom: 24), child: CircularProgressIndicator()),
+              // 애니메이션
               AnimatedOpacity(
                 opacity: showLoginButton.value ? 1 : 0,
                 duration: Duration(milliseconds: 800),
@@ -45,21 +74,7 @@ class SplashPage extends HookConsumerWidget {
                       icon: Icons.language,
                       text: "구글로 로그인하기",
                       onTap: () async {
-                        final user = await ref
-                            .read(authViewModelProvider.notifier)
-                            .loginWithGoogle();
-
-                        if (user != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SignUpPage()),
-                          );
-                        } else {
-                          final error = ref.read(authViewModelProvider).error;
-                          ScaffoldMessenger.of(
-                            context,
-                          ).showSnackBar(SnackBar(content: Text(error ?? "로그인 실패")));
-                        }
+                        await ref.read(authViewModelProvider.notifier).loginWithGoogle();
                       },
                     ),
                     SizedBox(height: 16),

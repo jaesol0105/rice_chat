@@ -4,6 +4,8 @@ import 'package:rice_chat/ui/home_page/widgets/home_floating_action_button.dart'
 import 'package:rice_chat/ui/home_page/widgets/home_indexed_stack.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -25,6 +25,17 @@ class UserRepository {
     }
   }
 
+  /// 유저 위치 업데이트
+  Future<void> updateUserAddress({required String uid, required String address}) async {
+    try {
+      await db.collection('users').doc(uid).update({'address': address});
+    } catch (e) {
+      print('ERROR_updateUserAddress: $e');
+      rethrow;
+    }
+  }
+
+  /// 유저 정보 불러오기
   Future<UserEntity> getUser(String userId) async {
     try {
       final doc = await db.collection('users').doc(userId).get();

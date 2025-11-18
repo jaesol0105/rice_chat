@@ -27,8 +27,6 @@ class HomeFloatingActionButton extends StatelessWidget {
             );
           },
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-          backgroundColor: Theme.of(context).highlightColor,
-          foregroundColor: Colors.white,
           child: Icon(Icons.add),
         );
       },

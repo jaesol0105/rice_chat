@@ -13,7 +13,7 @@ part of 'sign_up_view_model.dart';
 const signUpViewModelProvider = SignUpViewModelProvider._();
 
 final class SignUpViewModelProvider
-    extends $NotifierProvider<SignUpViewModel, void> {
+    extends $NotifierProvider<SignUpViewModel, SignUpState> {
   const SignUpViewModelProvider._()
     : super(
         from: null,
@@ -33,31 +33,31 @@ final class SignUpViewModelProvider
   SignUpViewModel create() => SignUpViewModel();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(void value) {
+  Override overrideWithValue(SignUpState value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<void>(value),
+      providerOverride: $SyncValueProvider<SignUpState>(value),
     );
   }
 }
 
-String _$signUpViewModelHash() => r'04c7cc935b92f694e8ef2042f56d4edc1b40269f';
+String _$signUpViewModelHash() => r'de5c5801d4f80fdce8658531e9b121ceb576e392';
 
-abstract class _$SignUpViewModel extends $Notifier<void> {
-  void build();
+abstract class _$SignUpViewModel extends $Notifier<SignUpState> {
+  SignUpState build();
   @$mustCallSuper
   @override
   void runBuild() {
-    build();
-    final ref = this.ref as $Ref<void, void>;
+    final created = build();
+    final ref = this.ref as $Ref<SignUpState, SignUpState>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<void, void>,
-              void,
+              AnyNotifier<SignUpState, SignUpState>,
+              SignUpState,
               Object?,
               Object?
             >;
-    element.handleValue(ref, null);
+    element.handleValue(ref, created);
   }
 }

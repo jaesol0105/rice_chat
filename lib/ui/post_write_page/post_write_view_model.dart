@@ -22,7 +22,7 @@ class PostWriteViewModel extends _$PostWriteViewModel {
 
     // 사진 선택
     final picked = await ImagePicker().pickMultiImage(
-      //limit: state.remain,
+      // limit: state.remain,
       imageQuality: 85,
       requestFullMetadata: false,
     );

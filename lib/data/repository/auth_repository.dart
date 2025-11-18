@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rice_chat/data/model/user_check_status.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_repository.g.dart';
@@ -12,6 +13,7 @@ class AuthRepository {
   final GoogleSignIn googleSignIn;
   final FirebaseFirestore db;
 
+  /// 구글 계정 로그인
   Future<User> signInWithGoogle() async {
     await googleSignIn.initialize();
 
@@ -44,7 +46,7 @@ class AuthRepository {
       throw Exception("Firebase Google 로그인 실패: $e\n$st");
     }
 
-    // 5. 유저 null 체크
+    // 유저 null 체크
     final user = result.user;
     if (user == null) {
       throw Exception("Firebase에서 user 객체가 Null로 반환됨");
@@ -53,16 +55,29 @@ class AuthRepository {
     return user;
   }
 
-  Future<void> createUpdateUser({
-    required String uid,
-    required String email,
-    required String provider,
-  }) async {
-    await db.collection("users").doc(uid).set({
-      "email": email,
-      "provider": provider,
-      "updatedAt": FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+  /// 유저 생성
+  Future<void> createUser({required String uid, required String provider}) async {
+    await db.collection("users").doc(uid).set({"provider": provider}, SetOptions(merge: true));
+  }
+
+  /// 회원가입 진행 단계 체크
+  Future<UserCheckStatus> checkUserStatus(String uid) async {
+    final doc = await db.collection("users").doc(uid).get();
+    // 유저 문서가 존재하지 않음
+    if (!doc.exists) {
+      return UserCheckStatus.noDocument;
+    }
+    final data = doc.data() ?? {};
+    // 문서는 있지만 name 필드 없음 (회원가입 1단계 미완료)
+    if (data['name'] == null) {
+      return UserCheckStatus.missingName;
+    }
+    // name은 있지만 address 없음 (회원가입 2단계 미완료)
+    if (data['address'] == null) {
+      return UserCheckStatus.missingAddress;
+    }
+    // 모든 값이 있음 (회원가입이 된 계정)
+    return UserCheckStatus.completed;
   }
 }
 

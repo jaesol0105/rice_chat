@@ -13,7 +13,6 @@ abstract class UserEntity with _$UserEntity {
     required String? address,
     @JsonKey(name: 'about_me') String? aboutMe,
     required String? profileImgUrl,
-    //required String address,
   }) = _UserEntity;
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => _$UserEntityFromJson(json);
