@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_chat/core/theme/color_scheme_ext.dart';
+import 'package:rice_chat/ui/sign_up_page/sign_up_page.dart';
+import 'package:rice_chat/ui/splash_page/auth_view_model.dart';
 
 class SplashPage extends HookConsumerWidget {
   const SplashPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef widgetRef) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final showLoginButton = useState(false);
+    final authState = ref.watch(authViewModelProvider);
 
     useEffect(() {
       Future.delayed(Duration(seconds: 2), () {
@@ -25,8 +28,16 @@ class SplashPage extends HookConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Spacer(),
-              Image.asset("assets/images/logo.png"),
+              Image.asset("assets/images/logo.webp",
+              width: 320,
+              height: 320,
+              ),
               Spacer(),
+              if(authState.isLoading)
+              Padding(
+                padding: EdgeInsets.only(bottom: 24),
+                child: CircularProgressIndicator(),
+              ),
               AnimatedOpacity(
                 opacity: showLoginButton.value ? 1 : 0,
                 duration: Duration(milliseconds: 800),
@@ -43,6 +54,31 @@ class SplashPage extends HookConsumerWidget {
                       context,
                       icon: Icons.language,
                       text: "구글로 로그인하기",
+                      onTap: () async{
+                        final user = await ref
+                        .read(authViewModelProvider.notifier)
+                        .loginWithGoogle();
+
+                        if(user != null){
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                              builder: (context) => SignUpPage(),
+                            ),
+                          );
+                        } else {
+                          final error = ref.read(authViewModelProvider).error;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(error ?? "로그인 실패")),
+                          );
+                        }
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    button(
+                      context,
+                      icon: Icons.check_box_outline_blank,
+                      text: '네이버로 로그인하기',
                       onTap: () {},
                     ),
                   ],
@@ -76,6 +112,7 @@ class SplashPage extends HookConsumerWidget {
           color: Theme.of(context).colorScheme.fieldBackground,
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, size: 20),
