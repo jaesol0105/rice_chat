@@ -16,7 +16,7 @@ class HomeTabViewModel extends _$HomeTabViewModel {
     return HomeTabState(address: address, posts: posts);
   }
 
-  // 지역 기반으로 포스트 목록 가지고오기
+  // 현재 지역 포스트 가져오기
   Future<void> getPosts() async {
     state = AsyncLoading();
 

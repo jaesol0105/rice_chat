@@ -21,6 +21,7 @@ class UserRepository {
           );
     } catch (e) {
       print("ERROR_updateUser: $e");
+      rethrow;
     }
   }
 
@@ -30,10 +31,10 @@ class UserRepository {
       if (!doc.exists) {
         throw Exception('User not found (id: $userId)');
       }
-
       return UserEntity.fromJson({...doc.data()!, 'id': doc.id});
     } catch (e) {
       print("ERROR_getUser: $e");
+      rethrow;
     }
   }
 }

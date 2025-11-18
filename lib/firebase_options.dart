@@ -63,6 +63,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '352762993480',
     projectId: 'ricechat-38535',
     storageBucket: 'ricechat-38535.firebasestorage.app',
+    androidClientId: '352762993480-iqva8b7sh3ibfjltari72ckcig13kkk8.apps.googleusercontent.com',
+    iosClientId: '352762993480-sph8fie14e3hpedvu5s6tithlmfg83lu.apps.googleusercontent.com',
     iosBundleId: 'com.example.riceChat',
   );
+
 }

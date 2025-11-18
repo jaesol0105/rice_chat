@@ -16,19 +16,13 @@ class AuthViewModel extends _$AuthViewModel {
 
     try {
       final repo = ref.read(authRepositoryProvider);
-
       final user = await repo.signInWithGoogle();
-
-      await repo.createUpdateUser(
-        uid: user.uid,
-        email: user.email ?? "",
-        provider: "google",
-      );
+      await repo.createUpdateUser(uid: user.uid, email: user.email ?? "", provider: "google");
       state = state.copyWith(isLoading: false);
 
       return user;
     } catch (e) {
-      print(e);
+      print("loginWithGoogle $e");
       state = state.copyWith(isLoading: false, error: e.toString());
       return null;
     }

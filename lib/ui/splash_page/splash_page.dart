@@ -19,6 +19,7 @@ class SplashPage extends HookConsumerWidget {
       });
       return null;
     }, []);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -28,49 +29,36 @@ class SplashPage extends HookConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Spacer(),
-              Image.asset("assets/images/logo.webp",
-              width: 320,
-              height: 320,
-              ),
+              Image.asset("assets/images/logo.webp", width: 320, height: 320),
               Spacer(),
-              if(authState.isLoading)
-              Padding(
-                padding: EdgeInsets.only(bottom: 24),
-                child: CircularProgressIndicator(),
-              ),
+              if (authState.isLoading)
+                Padding(padding: EdgeInsets.only(bottom: 24), child: CircularProgressIndicator()),
               AnimatedOpacity(
                 opacity: showLoginButton.value ? 1 : 0,
                 duration: Duration(milliseconds: 800),
                 child: Column(
                   children: [
-                    button(
-                      context,
-                      icon: Icons.apple,
-                      text: '애플로 로그인하기',
-                      onTap: () {},
-                    ),
+                    button(context, icon: Icons.apple, text: '애플로 로그인하기', onTap: () {}),
                     SizedBox(height: 16),
                     button(
                       context,
                       icon: Icons.language,
                       text: "구글로 로그인하기",
-                      onTap: () async{
+                      onTap: () async {
                         final user = await ref
-                        .read(authViewModelProvider.notifier)
-                        .loginWithGoogle();
+                            .read(authViewModelProvider.notifier)
+                            .loginWithGoogle();
 
-                        if(user != null){
+                        if (user != null) {
                           Navigator.push(
-                            context, 
-                            MaterialPageRoute(
-                              builder: (context) => SignUpPage(),
-                            ),
+                            context,
+                            MaterialPageRoute(builder: (context) => SignUpPage()),
                           );
                         } else {
                           final error = ref.read(authViewModelProvider).error;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(error ?? "로그인 실패")),
-                          );
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(SnackBar(content: Text(error ?? "로그인 실패")));
                         }
                       },
                     ),
@@ -105,10 +93,7 @@ class SplashPage extends HookConsumerWidget {
         height: 65,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: Theme.of(context).colorScheme.fieldBorder,
-            width: 1,
-          ),
+          border: Border.all(color: Theme.of(context).colorScheme.fieldBorder, width: 1),
           color: Theme.of(context).colorScheme.fieldBackground,
         ),
         child: Row(

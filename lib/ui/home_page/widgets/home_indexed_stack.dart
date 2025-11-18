@@ -5,6 +5,7 @@ import 'package:rice_chat/ui/home_page/home_view_model.dart';
 
 class HomeIndexedStack extends StatelessWidget {
   const HomeIndexedStack({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Consumer(
