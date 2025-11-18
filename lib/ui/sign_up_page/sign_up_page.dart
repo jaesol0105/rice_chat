@@ -4,6 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rice_chat/core/theme/color_scheme_ext.dart';
+import 'package:rice_chat/ui/home_page/home_page.dart';
+import 'package:rice_chat/ui/sign_up_page/sign_up_view_model.dart';
 
 class SignUpPage extends HookConsumerWidget {
   const SignUpPage({super.key});
@@ -70,7 +72,7 @@ class SignUpPage extends HookConsumerWidget {
                         context,
                         image: Image.asset("assets/images/male.webp"),
                         selected: gender.value == "남성",
-                        onTap: () => gender.value == "남성",
+                        onTap: () => gender.value = "남성",
                       ),
                     ),
                     SizedBox(width: 5),
@@ -79,7 +81,7 @@ class SignUpPage extends HookConsumerWidget {
                         context,
                         image: Image.asset("assets/images/female.webp"),
                         selected: gender.value == "여성",
-                        onTap: () => gender.value == "여성",
+                        onTap: () => gender.value = "여성",
                       ),
                     ),
                   ],
@@ -89,7 +91,35 @@ class SignUpPage extends HookConsumerWidget {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          final viewModel = 
+                          ref.read(signUpViewModelProvider.notifier);
+
+                          final error = viewModel.validate(
+                            name: nameController.text.trim(), 
+                            ageText: ageController.text.trim(), 
+                            about: descriptionController.text.trim(), 
+                          );
+                          if(error != null){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(error))
+                            );
+                            return;
+                          }
+
+                          await viewModel.saveProfile(
+                            name: nameController.text, 
+                            age: int.tryParse(ageController.text) ?? 0, 
+                            sex: gender.value == "남성", 
+                            address: null, 
+                            aboutMe: descriptionController.text
+                          );
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                              builder: (context) => HomePage())
+                          );
+                        },
                         child: Text("프로필 등록"),
                       ),
                     ),
