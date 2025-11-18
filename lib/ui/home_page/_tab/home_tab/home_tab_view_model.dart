@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rice_chat/data/repository/post_repository.dart';
 import 'package:rice_chat/ui/home_page/_tab/home_tab/home_tab_state.dart';
+import 'package:rice_chat/ui/user_global_view_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_tab_view_model.g.dart';
@@ -10,21 +12,36 @@ class HomeTabViewModel extends _$HomeTabViewModel {
 
   @override
   Future<HomeTabState> build() async {
-    // final address = ref.read(userViewModel).address;
-    final address = "경기도 군포시 금정동";
+    // 나중에 authVM에서 상태 값으로 관리하도록 변경
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) {
+      // 로그인 안 된 상태라면 빈 상태 리턴
+      return const HomeTabState(address: '', posts: []);
+    }
+    final user = await ref.watch(userGlobalViewModelProvider(uid).future);
+    final address = user.address;
+
+    if (address == null || address.isEmpty) {
+      return const HomeTabState(address: '', posts: []);
+    }
+
     final posts = await repo.getPosts(address);
     return HomeTabState(address: address, posts: posts);
   }
 
   // 현재 지역 포스트 가져오기
   Future<void> getPosts() async {
+    final currentState = state.value;
+    if (currentState == null || currentState.address.isEmpty) {
+      return;
+    }
+
     state = AsyncLoading();
 
     // guard : try–catch + AsyncValue 변환까지 해줌
     state = await AsyncValue.guard(() async {
-      final currentAddress = state.value!.address;
-      final posts = await repo.getPosts(currentAddress);
-      return HomeTabState(address: currentAddress, posts: posts);
+      final posts = await repo.getPosts(currentState.address);
+      return currentState.copyWith(posts: posts);
     });
   }
 }

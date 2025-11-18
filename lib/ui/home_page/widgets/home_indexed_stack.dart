@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rice_chat/ui/home_page/_tab/chat_tab/chat_tab.dart';
 import 'package:rice_chat/ui/home_page/_tab/home_tab/home_tab.dart';
+import 'package:rice_chat/ui/home_page/_tab/profile_tab/profile_tab.dart';
 import 'package:rice_chat/ui/home_page/home_view_model.dart';
 
 class HomeIndexedStack extends StatelessWidget {
@@ -11,7 +13,7 @@ class HomeIndexedStack extends StatelessWidget {
     return Consumer(
       builder: (context, ref, child) {
         final currentIndex = ref.watch(homeViewModelProvider);
-        return IndexedStack(index: currentIndex, children: [HomeTab()]);
+        return IndexedStack(index: currentIndex, children: [HomeTab(), ChatTab(), ProfileTab()]);
       },
     );
   }
