@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:rice_chat/core/auth/current_user_id_provider.dart';
+import 'package:rice_chat/core/chat_room_id_utils.dart';
 import 'package:rice_chat/core/date_time_utils.dart';
 import 'package:rice_chat/data/model/post_entity.dart';
-import 'package:rice_chat/ui/user_global_view_model.dart';
+import 'package:rice_chat/ui/chat_page/chat_page.dart';
+import 'package:rice_chat/ui/home_page/_tab/home_tab/user_by_id_provider.dart';
 
 class PostItemView extends ConsumerWidget {
   PostItemView({super.key, required this.posts});
@@ -11,7 +14,7 @@ class PostItemView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userGlobalViewModelProvider(posts.writer));
+    final user = ref.watch(userByIdProvider(posts.writer));
 
     return GestureDetector(
       onTap: () {
@@ -63,7 +66,26 @@ class PostItemView extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 8),
-            const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.black54),
+            GestureDetector(
+              onTap: () {
+                final myUid = ref.read(currentUserIdProvider);
+                final targetUid = posts.writer;
+
+                if (myUid == null) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text('로그인 후 이용해주세요.')));
+                  return;
+                }
+
+                // 내 글에는 채팅 못 보내도록
+                if (myUid == targetUid) return;
+                final roomId = buildRoomId(myUid, targetUid);
+
+                Navigator.push(context, MaterialPageRoute(builder: (_) => ChatPage(roomId)));
+              },
+              child: const Icon(Icons.send, color: Colors.black54),
+            ),
           ],
         ),
       ),

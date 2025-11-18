@@ -15,21 +15,25 @@ class PostListView extends HookConsumerWidget {
       child: state.when(
         data: (homeTabState) {
           final posts = homeTabState.posts;
-          // 포스트가 존재하지 않을 경우
-          if (posts.isEmpty) {
-            return Center(child: Text("현재 지역에서 작성된 게시글이 없습니다."));
-          }
           // 스크롤 새로고침
           return RefreshIndicator(
             onRefresh: vm.getPosts,
-            child: ListView.separated(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              itemCount: posts.length,
-              itemBuilder: (_, index) {
-                return PostItemView(posts: posts[index]);
-              },
-              separatorBuilder: (_, __) => SizedBox(height: 20),
-            ),
+            child: posts.isEmpty
+                ? ListView(
+                    padding: const EdgeInsets.only(top: 100),
+                    children: const [
+                      // 포스트가 존재하지 않을 경우
+                      Center(child: Text("현재 지역에서 작성된 게시글이 없습니다.", textAlign: TextAlign.center)),
+                    ],
+                  )
+                : ListView.separated(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    itemCount: posts.length,
+                    itemBuilder: (_, index) {
+                      return PostItemView(posts: posts[index]);
+                    },
+                    separatorBuilder: (_, __) => SizedBox(height: 20),
+                  ),
           );
         },
         loading: () => Center(child: CircularProgressIndicator()),

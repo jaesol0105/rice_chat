@@ -34,7 +34,7 @@ final class AddressSearchViewModelProvider
 }
 
 String _$addressSearchViewModelHash() =>
-    r'e2b9b0504454ea4c74c018bd7500e720c24d0eb3';
+    r'96ea5b14cdc539fe1a47169c0f52bfacf09c06f5';
 
 abstract class _$AddressSearchViewModel extends $AsyncNotifier<List<String>> {
   FutureOr<List<String>> build();

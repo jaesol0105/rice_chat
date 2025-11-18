@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rice_chat/core/auth/current_user_id_provider.dart';
 import 'package:rice_chat/data/repository/post_repository.dart';
 import 'package:rice_chat/ui/home_page/_tab/home_tab/home_tab_state.dart';
 import 'package:rice_chat/ui/user_global_view_model.dart';
@@ -13,13 +13,13 @@ class HomeTabViewModel extends _$HomeTabViewModel {
   @override
   Future<HomeTabState> build() async {
     // 나중에 authVM에서 상태 값으로 관리하도록 변경
-    final uid = FirebaseAuth.instance.currentUser?.uid;
+    final uid = ref.watch(currentUserIdProvider);
     if (uid == null) {
       // 로그인 안 된 상태라면 빈 상태 리턴
       return const HomeTabState(address: '', posts: []);
     }
-    final user = await ref.watch(userGlobalViewModelProvider(uid).future);
-    final address = user.address;
+    final user = await ref.watch(userGlobalViewModelProvider.future);
+    final address = user!.address;
 
     if (address == null || address.isEmpty) {
       return const HomeTabState(address: '', posts: []);

@@ -18,7 +18,7 @@ class HomeTimeBasedHeader extends ConsumerWidget {
         return Column(
           children: [
             const SizedBox(height: 12),
-            // 현재 지역 표시
+            // 현재 위치한 읍면동 표시
             Align(
               alignment: Alignment.centerLeft,
               child: Container(
@@ -29,7 +29,7 @@ class HomeTimeBasedHeader extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  state.address, // ← 이제 바로 사용 가능
+                  state.address,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 14,
@@ -38,9 +38,9 @@ class HomeTimeBasedHeader extends ConsumerWidget {
                 ),
               ),
             ),
-            // 배너 이미지 (시간에 따라 변경)
+            // 배너 이미지 (시간에 따라 바뀜)
             Center(child: Image.asset(imageAsset, width: 200, height: 200, fit: BoxFit.contain)),
-            // 날짜 시간 표시
+            // 날짜랑 시간 표시
             Text(formattedTime, style: const TextStyle(fontSize: 14, color: Colors.black54)),
             const SizedBox(height: 16),
           ],
@@ -54,14 +54,12 @@ class HomeTimeBasedHeader extends ConsumerWidget {
     );
   }
 
-  /// 시간대별로 다른 이미지 리턴
+  /// 시간대별로 다른 이미지 반환
   String _getImageAssetForHour(int hour) {
     // 6시 ~ 22시 : 낮
     if (hour >= 6 && hour < 22) {
       return 'assets/images/sun.webp';
-    }
-    // 그 외 : 밤
-    else {
+    } else {
       return 'assets/images/moon.webp';
     }
   }

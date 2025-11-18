@@ -4,9 +4,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_chat/core/theme/theme.dart';
 import 'package:rice_chat/firebase_options.dart';
 import 'package:rice_chat/ui/splash_page/splash_page.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('ko_KR', null);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ProviderScope(child: MyApp()));
 }
