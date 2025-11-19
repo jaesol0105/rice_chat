@@ -32,7 +32,7 @@ class PostListView extends HookConsumerWidget {
                     itemBuilder: (_, index) {
                       return PostItemView(posts: posts[index]);
                     },
-                    separatorBuilder: (_, __) => SizedBox(height: 20),
+                    separatorBuilder: (_, __) => SizedBox(height: 16),
                   ),
           );
         },
