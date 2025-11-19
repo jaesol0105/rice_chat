@@ -28,7 +28,7 @@ class PostItemView extends ConsumerWidget {
         // );
       },
       child: Container(
-        height: 120,
+        height: 110,
         width: double.infinity,
         decoration: ShapeDecoration(
           color: Colors.white,
@@ -89,7 +89,7 @@ class PostItemView extends ConsumerWidget {
             const SizedBox(width: 8),
             Container(
               width: 40,
-              height: 120,
+              height: 110,
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Builder(
@@ -116,7 +116,7 @@ class PostItemView extends ConsumerWidget {
                             MaterialPageRoute(builder: (_) => ChatPage(roomId)),
                           );
                         },
-                        child: const Icon(Icons.send, color: Colors.black54),
+                        child: const Icon(Icons.send, size: 30, color: Colors.black54),
                       ),
                     );
                   },

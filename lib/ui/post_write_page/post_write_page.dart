@@ -22,7 +22,7 @@ class PostWritePage extends HookConsumerWidget {
               Navigator.pop(context);
             },
           ),
-          title: Text("글 쓰기"),
+          title: Text("글 쓰기", style: const TextStyle(fontWeight: FontWeight.bold)),
         ),
 
         // 글 작성 뷰
