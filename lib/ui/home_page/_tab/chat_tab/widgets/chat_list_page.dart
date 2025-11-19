@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:rice_chat/core/auth/current_user_id_provider.dart';
 import 'package:rice_chat/data/model/chat_room_entity.dart';
 import 'package:rice_chat/ui/chat_page/chat_page.dart';
 import 'package:rice_chat/ui/home_page/_tab/chat_tab/chat_room_list_view_model.dart';
+import 'package:rice_chat/ui/home_page/_tab/home_tab/user_by_id_provider.dart';
 import 'package:rice_chat/ui/user_global_view_model.dart';
 
 class ChatListPage extends HookConsumerWidget {
@@ -51,13 +53,37 @@ class ChatListPage extends HookConsumerWidget {
   }
 }
 
-class _ChatRoomTile extends StatelessWidget {
+class _ChatRoomTile extends ConsumerWidget {
   const _ChatRoomTile({required this.room});
 
   final ChatRoomEntity room;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final myId = ref.watch(currentUserIdProvider);
+
+    // 혹시 null이면 그냥 빈 타일
+    if (myId == null) {
+      return const ListTile(title: Text('유저 정보 없음'));
+    }
+
+    // members 중에서 상대 id 찾기
+    final otherId = room.members.firstWhere((id) => id != myId);
+
+    // 유저 정보 가져오기
+    final otherUserAsync = ref.watch(userByIdProvider(otherId));
+    String name = '알 수 없음';
+    String? profileImg;
+
+    otherUserAsync.when(
+      data: (user) {
+        name = user.name;
+        profileImg = user.profileImgUrl;
+      },
+      loading: () {},
+      error: (e, st) {},
+    );
+
     String timeText = '';
     if (room.lastMessageTime != null) {
       timeText = DateFormat('a hh:mm', 'ko_KR').format(room.lastMessageTime!);
@@ -68,15 +94,15 @@ class _ChatRoomTile extends StatelessWidget {
       leading: CircleAvatar(
         radius: 24,
         backgroundColor: Colors.grey[300],
-        backgroundImage: (room.imageUrl != null && room.imageUrl!.isNotEmpty)
-            ? NetworkImage(room.imageUrl!)
+        backgroundImage: (profileImg != null && profileImg!.isNotEmpty)
+            ? NetworkImage(profileImg!)
             : null,
-        child: (room.imageUrl == null || room.imageUrl!.isEmpty)
+        child: (profileImg == null || profileImg!.isEmpty)
             ? const Icon(Icons.person, color: Colors.white)
             : null,
       ),
       title: Text(
-        room.title,
+        name,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
