@@ -1,273 +1,280 @@
 import 'package:flutter/material.dart';
-import 'package:rice_chat/chat_detail_page.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:rice_chat/core/auth/current_user_id_provider.dart';
+import 'package:rice_chat/core/chat_room_id_utils.dart';
+import 'package:rice_chat/ui/chat_page/chat_page.dart';
+import 'package:rice_chat/ui/detail_page/post_by_id_provider.dart';
+import 'package:rice_chat/ui/home_page/_tab/home_tab/user_by_id_provider.dart';
+import 'package:rice_chat/ui/user_global_view_model.dart';
 
-class ViewPage extends StatefulWidget {
-  const ViewPage({super.key});
-  @override
-  State<ViewPage> createState() => ViewPageState();
-}
+class PostDetailPage extends ConsumerWidget {
+  const PostDetailPage({super.key, required this.postId});
 
-class ViewPageState extends State<ViewPage> {
-  int imageIndex = 1;
-  List<String> imageNumbers = [
-    "https://picsum.photos/300/300",
-    "https://picsum.photos/301/301",
-    "https://picsum.photos/302/302",
-  ];
+  final String postId;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // [유저 상태]
+    final userAsync = ref.watch(userGlobalViewModelProvider);
+    if (userAsync.isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    if (userAsync.hasError) {
+      return const Scaffold(body: Center(child: Text('유저 정보를 불러오지 못했습니다.')));
+    }
+    final user = userAsync.value;
+    if (user == null) {
+      return const Scaffold(body: Center(child: Text('유저 정보가 없습니다.')));
+    }
+
+    final postAsync = ref.watch(postByIdProvider((address: user.address!, postId: postId)));
     return Scaffold(
-      // 🔥  바탕 화면 색상 🔥
-      backgroundColor: Color(0xFFFCF5F3),
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, size: 35),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Column(
-        children: [
-          // 🔥 회색 이미지 화면 🔥
-          Container(
-            height: 330,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                // 🔥 중앙 이미지  🔥
-                image: NetworkImage(imageNumbers[imageIndex]),
-                fit: BoxFit.cover,
-              ),
-              color: Colors.grey[200],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                // 🔥 이미지 아이콘 왼쪽 🔥
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      imageIndex == 0 ? imageIndex = 2 : imageIndex--;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    size: 30,
-                    color: Colors.black,
+      appBar: AppBar(),
+      body: postAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, st) => Center(child: Text('게시글을 불러오는 중 오류가 발생했어요.\n$e')),
+        data: (post) {
+          if (post == null) {
+            return const Center(child: Text('게시글을 찾을 수 없습니다.'));
+          }
+          final userAsync = ref.watch(userByIdProvider(post.writer));
+          return userAsync.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (e, st) => Center(child: Text('작성자 정보를 불러오는 중 오류가 발생했어요.\n$e')),
+            data: (user) {
+              return Column(
+                children: [
+                  // 상단 이미지 슬라이더
+                  SizedBox(
+                    height: 350,
+                    width: double.infinity,
+                    child: (post.images == null || post.images!.isEmpty)
+                        ? Container(color: const Color(0xFFD9D9D9))
+                        : PostImageSlider(images: post.images!),
                   ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+
+                  // 내용 영역
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                       children: [
-                        // 🔥 이미지 아이콘 3개 🔥
-                        Icon(
-                          Icons.circle,
-                          size: 15,
-                          color: imageIndex == 0
-                              ? Colors.grey[600]
-                              : Colors.grey[400],
+                        // 작성자 + 프로필
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 28,
+                              backgroundImage: user.profileImgUrl != null
+                                  ? NetworkImage(user.profileImgUrl!)
+                                  : null,
+                              backgroundColor: Colors.grey[300],
+                              child: user.profileImgUrl == null
+                                  ? const Icon(Icons.person, size: 32)
+                                  : null,
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    user.name,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 5),
-                        Icon(
-                          Icons.circle,
-                          size: 15,
-                          color: imageIndex == 1
-                              ? Colors.grey[600]
-                              : Colors.grey[400],
-                        ),
-                        SizedBox(width: 5),
-                        Icon(
-                          Icons.circle,
-                          size: 15,
-                          color: imageIndex == 2
-                              ? Colors.grey[600]
-                              : Colors.grey[400],
-                        ),
+
+                        const SizedBox(height: 24),
+
+                        // 내용
+                        Text(post.content, style: const TextStyle(fontSize: 16, height: 1.5)),
+                        const SizedBox(height: 16),
+                        const SizedBox(height: 40),
                       ],
                     ),
                   ),
-                ),
-                // 🔥 이미지 아이콘 오른쪽 🔥
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      imageIndex == 2 ? imageIndex = 0 : imageIndex++;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 30,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 🔥 이미지 왼쪽 원형 🔥
-              Container(
-                margin: EdgeInsets.all(10),
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage("https://picsum.photos/200/200"),
-                    fit: BoxFit.cover,
-                  ),
-                  color: Colors.grey[400],
-                  shape: BoxShape.circle,
-                ),
-              ),
-              SizedBox(width: 10),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // 🔥 이름 제목 🔥
-                children: [
-                  Text(
-                    '권태윤',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF373737),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      // 🔥 이미지 왼쪽 일식 🔥
-                      Container(
-                        width: 70,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.orangeAccent,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 15,
-                              height: 15,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    'https://img.icons8.com/color/200/sushi.png',
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            Text('일식', style: TextStyle(color: Colors.white)),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      // 🔥 이미지 오른쪽 회/초밥 🔥
-                      Container(
-                        width: 70,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.deepOrangeAccent,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 15,
-                              height: 15,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    "https://img.icons8.com/ios/200/sushi.png",
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            Text('회/초밥', style: TextStyle(color: Colors.white)),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 🔥  왼쪽 메인 제목 🔥
-              Container(
-                padding: EdgeInsets.all(20),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "밥 같이 먹으실 여성분 찾고있어요\n:>",
-                  style: TextStyle(fontSize: 20, color: Color(0xFF373737)),
-                ),
-              ),
-              // 🔥 이미지 왼쪽 하단 숫자  🔥
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text('(2/10)'),
-              ),
-            ],
-          ),
-          Spacer(),
-          // 🔥 메세지 창  🔥
-          InkWell(
-            onTap: () {
-              // 🔥 채팅 페이지로 이동 🔥
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ChatDetailPage()),
               );
             },
-            child: Container(
-              margin: EdgeInsets.only(bottom: 30),
-              width: 350,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Color(0xFF983E24),
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        "채팅으로 이동",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
-                  ),
-                  // 🔥 메세지 오른쪽 이동 아이콘 🔥
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    // 🔥  메세지 창 화살표 아이콘 🔥
-                    child: Icon(Icons.send_outlined, color: Colors.white),
-                  ),
-                ],
-              ),
+          );
+        },
+      ),
+      bottomNavigationBar: BottomChatButton(
+        address: user.address!, // 유저 주소
+        postId: postId,
+      ),
+    );
+  }
+}
+
+/// 이미지 슬라이더 (PageView + 인디케이터)
+class PostImageSlider extends HookWidget {
+  const PostImageSlider({super.key, required this.images});
+
+  final List<String> images;
+
+  @override
+  Widget build(BuildContext context) {
+    final pageController = usePageController();
+    final currentIndex = useState(0);
+
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        // PageView
+        PageView.builder(
+          controller: pageController,
+          itemCount: images.length,
+          onPageChanged: (index) => currentIndex.value = index,
+          itemBuilder: (context, index) {
+            return Container(
+              color: const Color(0xFFD9D9D9), // 기본 회색 배경
+              width: double.infinity,
+              child: Image.network(images[index], fit: BoxFit.cover, width: double.infinity),
+            );
+          },
+        ),
+
+        // 좌우 화살표
+        if (images.length > 1) ...[
+          Positioned(
+            left: 12,
+            bottom: 16,
+            child: GestureDetector(
+              onTap: () {
+                if (currentIndex.value > 0) {
+                  pageController.previousPage(
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeOut,
+                  );
+                }
+              },
+              child: Icon(Icons.chevron_left, size: 32, color: Colors.white.withOpacity(0.8)),
+            ),
+          ),
+          Positioned(
+            right: 12,
+            bottom: 16,
+            child: GestureDetector(
+              onTap: () {
+                if (currentIndex.value < images.length - 1) {
+                  pageController.nextPage(
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeOut,
+                  );
+                }
+              },
+              child: Icon(Icons.chevron_right, size: 32, color: Colors.white.withOpacity(0.8)),
             ),
           ),
         ],
-      ),
+
+        // 인디케이터
+        if (images.length > 1)
+          Positioned(
+            bottom: 10,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                images.length,
+                (index) => Container(
+                  width: 8,
+                  height: 8,
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: currentIndex.value == index
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.4),
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// 하단 버튼
+class BottomChatButton extends ConsumerWidget {
+  const BottomChatButton({super.key, required this.address, required this.postId});
+
+  final String address;
+  final String postId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final myUid = ref.watch(currentUserIdProvider);
+    final postAsync = ref.watch(postByIdProvider((address: address, postId: postId)));
+
+    return postAsync.when(
+      loading: () => const SizedBox.shrink(),
+      error: (e, st) => const SizedBox.shrink(),
+      data: (post) {
+        if (post == null) return const SizedBox.shrink();
+
+        final isMine = myUid != null && myUid == post.writer;
+
+        return SafeArea(
+          minimum: const EdgeInsets.all(16),
+          child: SizedBox(
+            height: 56,
+            width: double.infinity,
+            child: isMine
+                ? SizedBox.shrink()
+                : ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isMine
+                          ? const Color.fromARGB(255, 56, 109, 255)
+                          : const Color(0xFF9B3A1A), // 갈색 버튼
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                      elevation: 0,
+                    ),
+                    onPressed: () {
+                      if (myUid == null) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(const SnackBar(content: Text('로그인 후 이용해주세요.')));
+                        return;
+                      }
+
+                      if (isMine) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(const SnackBar(content: Text('미구현 기능입니다.')));
+                        return;
+                      }
+
+                      final roomId = buildRoomId(myUid, post.writer);
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => ChatPage(roomId)));
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          isMine ? '수정하기' : '채팅으로 이동',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Icon(isMine ? Icons.edit : Icons.send_rounded, color: Colors.white),
+                      ],
+                    ),
+                  ),
+          ),
+        );
+      },
     );
   }
 }

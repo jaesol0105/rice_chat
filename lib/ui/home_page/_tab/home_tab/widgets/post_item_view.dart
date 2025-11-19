@@ -5,6 +5,7 @@ import 'package:rice_chat/core/chat_room_id_utils.dart';
 import 'package:rice_chat/core/date_time_utils.dart';
 import 'package:rice_chat/data/model/post_entity.dart';
 import 'package:rice_chat/ui/chat_page/chat_page.dart';
+import 'package:rice_chat/ui/detail_page/detail_page.dart';
 import 'package:rice_chat/ui/home_page/_tab/home_tab/user_by_id_provider.dart';
 
 class PostItemView extends ConsumerWidget {
@@ -18,14 +19,14 @@ class PostItemView extends ConsumerWidget {
 
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) {
-        //       return ProductDetailPage(productSummary.id);
-        //     },
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return PostDetailPage(postId: posts.id);
+            },
+          ),
+        );
       },
       child: Container(
         height: 110,
