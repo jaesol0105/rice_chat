@@ -80,7 +80,7 @@ class ChatPage extends HookConsumerWidget {
         appBar: AppBar(
           backgroundColor: const Color(0xFFF8F4E8),
           centerTitle: true,
-          // title: Text(roomId, style: const TextStyle(fontWeight: FontWeight.bold)),
+          // sxasastitle: Text(roomId, style: const TextStyle(fontWeight: FontWeight.bold)),
         ),
         body: ListView.builder(
           // 키보드 높이 반영
@@ -167,16 +167,6 @@ class ChatPage extends HookConsumerWidget {
                     onChanged: (_) {
                       updateBottomSheetHeight();
                     },
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: BorderSide(color: Colors.grey[500]!),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: const BorderSide(width: 2, color: Color(0xFF983E24)),
-                      ),
-                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -212,7 +202,10 @@ class ChatPage extends HookConsumerWidget {
                       color: Theme.of(context).colorScheme.primary,
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    child: const Icon(Icons.send, color: Colors.white),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 3.0),
+                      child: const Icon(Icons.send, color: Colors.white),
+                    ),
                   ),
                 ),
               ],

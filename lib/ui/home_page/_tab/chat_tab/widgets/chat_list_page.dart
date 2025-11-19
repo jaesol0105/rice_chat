@@ -43,7 +43,7 @@ class ChatListPage extends HookConsumerWidget {
           : ListView.separated(
               controller: scrollController,
               itemCount: rooms.length,
-              separatorBuilder: (_, __) => const Divider(height: 1),
+              separatorBuilder: (_, __) => const SizedBox(height: 1),
               itemBuilder: (context, index) {
                 final room = rooms[index];
                 return _ChatRoomTile(room: room);

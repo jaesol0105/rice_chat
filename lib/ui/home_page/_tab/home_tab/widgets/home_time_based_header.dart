@@ -17,12 +17,12 @@ class HomeTimeBasedHeader extends ConsumerWidget {
       data: (state) {
         return Column(
           children: [
-            const SizedBox(height: 12),
+            const SizedBox(height: 24),
             // 현재 위치한 읍면동 표시
             Align(
               alignment: Alignment.centerLeft,
               child: Container(
-                margin: const EdgeInsets.only(left: 24, top: 24),
+                margin: const EdgeInsets.only(left: 20, top: 24),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,

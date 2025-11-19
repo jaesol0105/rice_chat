@@ -232,13 +232,6 @@ class BottomChatButton extends ConsumerWidget {
             child: isMine
                 ? SizedBox.shrink()
                 : ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isMine
-                          ? const Color.fromARGB(255, 56, 109, 255)
-                          : const Color(0xFF9B3A1A), // 갈색 버튼
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-                      elevation: 0,
-                    ),
                     onPressed: () {
                       if (myUid == null) {
                         ScaffoldMessenger.of(
@@ -257,18 +250,24 @@ class BottomChatButton extends ConsumerWidget {
                       final roomId = buildRoomId(myUid, post.writer);
                       Navigator.push(context, MaterialPageRoute(builder: (_) => ChatPage(roomId)));
                     },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Stack(
                       children: [
-                        Text(
-                          isMine ? '수정하기' : '채팅으로 이동',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                        Center(
+                          child: Text(
+                            '채팅으로 이동',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                        Icon(isMine ? Icons.edit : Icons.send_rounded, color: Colors.white),
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Icon(Icons.send_rounded, color: Colors.white),
+                          ),
+                        ),
                       ],
                     ),
                   ),
