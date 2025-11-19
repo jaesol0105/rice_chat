@@ -1,272 +1,159 @@
 import 'package:flutter/material.dart';
-import 'package:rice_chat/chat_detail_page.dart';
 
-class ViewPage extends StatefulWidget {
-  const ViewPage({super.key});
+class BookDetailPage extends StatefulWidget {
+  const BookDetailPage({
+    super.key,
+    required this.book,
+    required this.index,
+    required this.onAddBookToCartList,
+    required this.onNavigateToCart,
+  });
+
+  final BookEntity book;
+  final int index;
+  final void Function(BookEntity, int) onAddBookToCartList;
+  final VoidCallback onNavigateToCart;
+
   @override
-  State<ViewPage> createState() => ViewPageState();
+  State<BookDetailPage> createState() => _BookDetailPageState();
 }
 
-class ViewPageState extends State<ViewPage> {
-  int imageIndex = 1;
-  List<String> imageNumbers = [
-    "https://picsum.photos/300/300",
-    "https://picsum.photos/301/301",
-    "https://picsum.photos/302/302",
-  ];
+class _BookDetailPageState extends State<BookDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 🔥  바탕 화면 색상 🔥
-      backgroundColor: Color(0xFFFCF5F3),
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, size: 35),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Column(
+      appBar: AppBar(title: Text("상세 페이지")),
+
+      // 상품의 상세 내용 뷰
+      body: ListView(
         children: [
-          // 🔥 회색 이미지 화면 🔥
+          // 이미지 슬라이더
+          SizedBox(
+            height: 350,
+            child: images.isEmpty
+                ? Container(color: Colors.grey)
+                : Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      PageView.builder(
+                        itemCount: images.length,
+                        onPageChanged: (index) {
+                          setState(() => currentIndex = index);
+                        },
+                        itemBuilder: (context, index) {
+                          return Image.file(
+                            File(images[index]),
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          );
+                        },
+                      ),
+
+                      // 좌측 화살표
+                      if (images.length > 1)
+                        Positioned(
+                          left: 8,
+                          child: Icon(
+                            Icons.chevron_left,
+                            size: 40,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
+                        ),
+
+                      //우측 화살표
+                      if (images.length > 1)
+                        Positioned(
+                          right: 8,
+                          child: Icon(
+                            Icons.chevron_right,
+                            size: 40,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
+                        ),
+
+                      // 인디케이터
+                      if (images.length > 1)
+                        Positioned(
+                          bottom: 10,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(
+                              images.length,
+                              (index) => Container(
+                                width: 8,
+                                height: 8,
+                                margin: const EdgeInsets.symmetric(horizontal: 4),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: currentIndex == index
+                                      ? Colors.white
+                                      : Colors.white.withOpacity(0.4),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+          ),
+          SizedBox(height: 25),
+
+          // 책 제목
           Container(
-            height: 330,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                // 🔥 중앙 이미지  🔥
-                image: NetworkImage(imageNumbers[imageIndex]),
-                fit: BoxFit.cover,
-              ),
-              color: Colors.grey[200],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                // 🔥 이미지 아이콘 왼쪽 🔥
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      imageIndex == 0 ? imageIndex = 2 : imageIndex--;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    size: 30,
-                    color: Colors.black,
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // 🔥 이미지 아이콘 3개 🔥
-                        Icon(
-                          Icons.circle,
-                          size: 15,
-                          color: imageIndex == 0
-                              ? Colors.grey[600]
-                              : Colors.grey[400],
-                        ),
-                        SizedBox(width: 5),
-                        Icon(
-                          Icons.circle,
-                          size: 15,
-                          color: imageIndex == 1
-                              ? Colors.grey[600]
-                              : Colors.grey[400],
-                        ),
-                        SizedBox(width: 5),
-                        Icon(
-                          Icons.circle,
-                          size: 15,
-                          color: imageIndex == 2
-                              ? Colors.grey[600]
-                              : Colors.grey[400],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // 🔥 이미지 아이콘 오른쪽 🔥
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      imageIndex == 2 ? imageIndex = 0 : imageIndex++;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 30,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Text(
+              "${widget.book.title}",
+              textAlign: TextAlign.start,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 🔥 이미지 왼쪽 원형 🔥
-              Container(
-                margin: EdgeInsets.all(10),
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage("https://picsum.photos/200/200"),
-                    fit: BoxFit.cover,
-                  ),
-                  color: Colors.grey[400],
-                  shape: BoxShape.circle,
-                ),
-              ),
-              SizedBox(width: 10),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // 🔥 이름 제목 🔥
-                children: [
-                  Text(
-                    '권태윤',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF373737),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      // 🔥 이미지 왼쪽 일식 🔥
-                      Container(
-                        width: 70,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.orangeAccent,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 15,
-                              height: 15,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    'https://img.icons8.com/color/200/sushi.png',
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            Text('일식', style: TextStyle(color: Colors.white)),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      // 🔥 이미지 오른쪽 회/초밥 🔥
-                      Container(
-                        width: 70,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.deepOrangeAccent,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 15,
-                              height: 15,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    "https://img.icons8.com/ios/200/sushi.png",
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            Text('회/초밥', style: TextStyle(color: Colors.white)),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 🔥  왼쪽 메인 제목 🔥
-              Container(
-                padding: EdgeInsets.all(20),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "밥 같이 먹으실 여성분 찾고있어요\n:>",
-                  style: TextStyle(fontSize: 20, color: Color(0xFF373737)),
-                ),
-              ),
-              // 🔥 이미지 왼쪽 하단 숫자  🔥
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text('(2/10)'),
-              ),
-            ],
-          ),
-          Spacer(),
-          // 🔥 메세지 창  🔥
-          InkWell(
-            onTap: () {
-              // 🔥 채팅 페이지로 이동 🔥
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ChatDetailPage()),
-              );
-            },
-            child: Container(
-              margin: EdgeInsets.only(bottom: 30),
-              width: 350,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Color(0xFF983E24),
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        "채팅으로 이동",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
-                  ),
-                  // 🔥 메세지 오른쪽 이동 아이콘 🔥
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    // 🔥  메세지 창 화살표 아이콘 🔥
-                    child: Icon(Icons.send_outlined, color: Colors.white),
-                  ),
-                ],
-              ),
+
+          // 책 저자
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Text(
+              "저자 : ${widget.book.author}",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
+          detailPageDivider(),
+
+          // 책의 가격
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Text(
+              "가격 : ${fmtPrice(widget.book.price)} 원",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+          ),
+          detailPageDivider(),
+
+          // 책 소개
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: widget.book.description == null
+                ? Text("")
+                : Text(
+                    "소개 : ${widget.book.description}",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+          ),
+          SizedBox(height: 30),
         ],
+      ),
+    );
+  }
+
+  // 디테일 페이지 의 선(줄)
+  Container detailPageDivider() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 15),
+      width: 100,
+      child: Divider(
+        // ← AppBar 밑에 선
+        thickness: 1, // 선 두께
+        color: Colors.grey, // 선 색상
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rice_chat/ui/home_page/_tab/home_tab/home_tab_view_model.dart';
 import 'package:rice_chat/ui/home_page/home_view_model.dart';
 import 'package:rice_chat/ui/post_write_page/post_write_page.dart';
 
@@ -16,8 +17,9 @@ class HomeFloatingActionButton extends StatelessWidget {
           return SizedBox();
         }
         return FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            // 본인이 글을 썼을 경우 결과 받아서 reload 해준다.
+            final result = await Navigator.push<bool>(
               context,
               MaterialPageRoute(
                 builder: (context) {
@@ -25,6 +27,9 @@ class HomeFloatingActionButton extends StatelessWidget {
                 },
               ),
             );
+            if (result == true) {
+              ref.invalidate(homeTabViewModelProvider);
+            }
           },
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
           child: Icon(Icons.add),

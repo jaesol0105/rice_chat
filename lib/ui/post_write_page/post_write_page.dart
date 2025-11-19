@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:rice_chat/ui/home_page/_tab/home_tab/home_tab_view_model.dart';
 import 'package:rice_chat/ui/post_write_page/post_write_view_model.dart';
 import 'package:rice_chat/ui/post_write_page/widgets/post_write_view.dart';
 
@@ -70,7 +71,7 @@ class PostWritePage extends HookConsumerWidget {
                       ).showSnackBar(SnackBar(content: Text(result.$2!))); // 실패
                       return;
                     }
-                    Navigator.pop(context, result.$3); // 성공
+                    Navigator.pop(context, true); // 성공
                   },
             child: const Text('저장'),
           ),
