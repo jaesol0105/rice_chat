@@ -80,7 +80,7 @@ class ChatPage extends HookConsumerWidget {
         appBar: AppBar(
           backgroundColor: const Color(0xFFF8F4E8),
           centerTitle: true,
-          title: Text(roomId, style: const TextStyle(fontWeight: FontWeight.bold)),
+          // title: Text(roomId, style: const TextStyle(fontWeight: FontWeight.bold)),
         ),
         body: ListView.builder(
           // 키보드 높이 반영

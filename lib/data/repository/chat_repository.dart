@@ -92,11 +92,11 @@ class ChatRepository {
   }
 
   /// 내가 속한 1:1 채팅방 목록 스트림
-  Stream<List<ChatRoomEntity>> chatRoomListStream(String userId) {
+  Stream<List<ChatRoomEntity>> chatRoomListStream(String myId) {
     try {
       final snapshots = db
           .collection('chats')
-          .where('members', arrayContains: userId) // 내가 포함된 방만
+          .where('members', arrayContains: myId) // 내가 포함된 방만
           .orderBy('last_message_time', descending: true) // 최근 대화 순
           .snapshots();
 
@@ -106,11 +106,10 @@ class ChatRepository {
 
           return ChatRoomEntity(
             id: doc.id,
-            title: data['title'] as String? ?? '',
+            members: List<String>.from(data['members'] ?? const []),
             lastMessage: data['last_message'] as String? ?? '',
             lastMessageTime: (data['last_message_time'] as Timestamp?)?.toDate(),
-            imageUrl: data['image_url'] as String?,
-            unreadCount: (data['unread_count_$userId'] as int?) ?? 0,
+            unreadCount: (data['unread_count_$myId'] as int?) ?? 0,
           );
         }).toList(),
       );

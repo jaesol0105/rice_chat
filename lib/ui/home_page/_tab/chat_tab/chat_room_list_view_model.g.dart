@@ -42,7 +42,7 @@ final class ChatRoomListViewModelProvider
 }
 
 String _$chatRoomListViewModelHash() =>
-    r'f358c71ad4f2ff6da4e0a190512111c9e5bfebb7';
+    r'6a5dc06d1e6a1ceb0e052225c1ec22018c068669';
 
 abstract class _$ChatRoomListViewModel extends $Notifier<List<ChatRoomEntity>> {
   List<ChatRoomEntity> build();
