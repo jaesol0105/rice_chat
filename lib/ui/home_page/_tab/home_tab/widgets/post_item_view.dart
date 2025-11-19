@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_chat/core/auth/current_user_id_provider.dart';
@@ -50,8 +51,9 @@ class PostItemView extends ConsumerWidget {
                   radius: 35,
                   backgroundColor: Colors.grey[300],
                   backgroundImage: user.when(
-                    data: (user) =>
-                        user.profileImgUrl != null ? NetworkImage(user.profileImgUrl!) : null,
+                    data: (user) => user.profileImgUrl != null
+                        ? NetworkImage(user.profileImgUrl!)
+                        : null,
                     loading: () => null,
                     error: (e, st) => null,
                   ),
@@ -68,20 +70,30 @@ class PostItemView extends ConsumerWidget {
             SizedBox(width: 16),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(top: 12.0, right: 12.0),
+                padding: const EdgeInsets.only(
+                  top: 12.0,
+                  right: 12.0,
+                  bottom: 8,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       posts.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
 
-                    Text(posts.content, style: TextStyle(fontSize: 14)),
+                    Expanded(
+                      child: Text(
+                        posts.content,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
                     SizedBox(height: 2),
                     Text(
                       DateTimeUtils.formatString(posts.createdAt!),
-                      style: TextStyle(fontSize: 11, color: Colors.black38),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
@@ -102,13 +114,13 @@ class PostItemView extends ConsumerWidget {
                       return const SizedBox.shrink();
                     }
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0, right: 12.0),
+                      padding: const EdgeInsets.only(bottom: 6, right: 12),
                       child: GestureDetector(
                         onTap: () {
                           if (myUid == null) {
-                            ScaffoldMessenger.of(
-                              context,
-                            ).showSnackBar(const SnackBar(content: Text('로그인 오류')));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('로그인 오류')),
+                            );
                             return;
                           }
                           final roomId = buildRoomId(myUid, targetUid);
@@ -117,7 +129,16 @@ class PostItemView extends ConsumerWidget {
                             MaterialPageRoute(builder: (_) => ChatPage(roomId)),
                           );
                         },
-                        child: const Icon(Icons.send, size: 30, color: Colors.black54),
+                        child: Container(
+                          width: 45,
+                          height: 45,
+                          color: Colors.transparent,
+                          child: const Icon(
+                            Icons.send,
+                            size: 22,
+                            color: Colors.black54,
+                          ),
+                        ),
                       ),
                     );
                   },

@@ -95,7 +95,10 @@ class PostDetailPage extends ConsumerWidget {
                         const SizedBox(height: 24),
 
                         // 내용
-                        Text(post.content, style: const TextStyle(fontSize: 16, height: 1.5)),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Text(post.content, style: const TextStyle(fontSize: 16, height: 1.5)),
+                        ),
                         const SizedBox(height: 16),
                         const SizedBox(height: 40),
                       ],
