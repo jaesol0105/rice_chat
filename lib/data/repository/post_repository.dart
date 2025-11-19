@@ -9,7 +9,7 @@ class PostRepository {
 
   final FirebaseFirestore db;
 
-  // 포스트 생성
+  /// 포스트 생성
   Future<void> createPost({required PostEntity post, required String address}) async {
     try {
       await db.collection("posts").doc(address).collection("posts").doc(post.id).set({
@@ -22,7 +22,7 @@ class PostRepository {
     }
   }
 
-  // 지역에 해당하는 포스트 불러오기
+  /// 지역에 해당하는 포스트 불러오기
   Future<List<PostEntity>> getPosts(String address) async {
     try {
       // posts > address > posts
@@ -33,6 +33,21 @@ class PostRepository {
     } catch (e) {
       print("ERROR_getPosts: $e");
       return [];
+    }
+  }
+
+  /// id를 통해 포스트 불러오기
+  Future<PostEntity?> getPostById(String address, String postId) async {
+    try {
+      // posts > address > posts > postid
+      final doc = await db.collection('posts').doc(address).collection('posts').doc(postId).get();
+      if (!doc.exists) {
+        throw Exception('Post not found');
+      }
+      return PostEntity.fromJson({'id': doc.id, ...?doc.data()});
+    } catch (e) {
+      print("ERROR_getPostById: $e");
+      return null;
     }
   }
 }
